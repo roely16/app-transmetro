@@ -37,7 +37,7 @@
                             <b-form-input type="email" v-model="usuario.email" autocomplete="off" required></b-form-input>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="12" sm="12" md="6">
+                    <!-- <b-col cols="12" sm="12" md="6">
                         <b-form-group label-class="font-weight-bold pt-0" label="Etapa">
                             <b-form-select v-model="usuario.etapa" :options="etapas" text-field="nombre" value-field="id" required>
                                 <template v-slot:first>
@@ -63,7 +63,7 @@
                                 </template>
                             </b-form-select>
                         </b-form-group>
-                    </b-col>
+                    </b-col> -->
                     <b-col cols="12" class="mt-4 text-center">
                         <b-button :disabled="isSending" type="submit" variant="success" size="lg">{{ isSending ? 'Registrando..' : 'Registrarse' }} 
                             <font-awesome-icon icon="sign-in-alt" />

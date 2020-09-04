@@ -101,10 +101,19 @@
                             <!-- Rol 1 -->
                             <b-row v-if="usuario.id_rol == 1">
                                 <b-col cols="12">
-                                    <b-form-group label-class="font-weight-bold pt-0" label="No. de Placa">
-                                        <b-input-group prepend="C - ">
-                                            <b-form-input v-model="reporte.no_placa" autocomplete="off" required></b-form-input>
+                                    <b-form-group description="Máximo 6 caracteres" label-class="font-weight-bold pt-0" label="No. de Placa">
+                                        <b-input-group  prepend="C - ">
+                                            <b-form-input maxlength="6" v-model="reporte.no_placa" autocomplete="off" required></b-form-input>
                                         </b-input-group>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col cols="12">
+                                    <b-form-group label-class="font-weight-bold pt-0" label="Tipo de Ruta">
+                                        <b-form-select v-model="tipo_ruta" :options="tipos_ruta" text-field="nombre" value-field="id" required>
+                                            <template v-slot:first>
+                                                <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
+                                            </template>
+                                        </b-form-select>
                                     </b-form-group>
                                 </b-col>
                                 <b-col cols="12">
@@ -246,6 +255,17 @@
                     useCurrent: false,
                     locale: 'es'
                 },
+                tipos_ruta: [
+                    {
+                        id: "L",
+                        nombre: "Ruta Larga"
+                    },
+                    {
+                        id: "C",
+                        nombre: "Ruta Corta"
+                    }
+                ],
+                tipo_ruta: null,
                 reporte: {
                     registrado_por: null,
                     no_placa: null,
@@ -253,7 +273,8 @@
                     no_bahia_desabordaje: null,
                     no_bahia_abordaje: null,
                     unidad_transmetro: null,
-                    observaciones: null
+                    observaciones: null,
+                    tipo_ruta: null
                 },
                 isAdmin: false,
                 reporteZona: [],
@@ -287,14 +308,6 @@
 					this.usuario = response.data
 					
                 })
-                
-                // Compañias de transporte
-                this.axios.get(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', usuario)
-				.then((response) => {
-
-					this.com_transporte = response.data
-					
-				})
 
                 this.axios.post(process.env.VUE_APP_API_URL + '/obtener_reporte.php', data)
                 .then((response) => {
@@ -311,8 +324,10 @@
                         no_bahia_desabordaje: null,
                         no_bahia_abordaje: null,
                         unidad_transmetro: null,
-                        observaciones: null
+                        observaciones: null,
                     }
+
+                    this.tipo_ruta = null
                     
                 })
 
@@ -371,6 +386,8 @@
             },
             showEdit(item){
 
+                console.log(item);
+
                 let usuario = JSON.parse(localStorage.getItem('usuario-auditoria-transporte'));
 
                 // Datos del usuario
@@ -381,18 +398,22 @@
 					
                 })
 
-                // Compañias de transporte
-                this.axios.get(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', usuario)
+                let data = {
+                    id_ruta: item.id_com_transporte
+                }
+
+                this.axios.post(process.env.VUE_APP_API_URL + '/detalle_com_transporte.php', data)
 				.then((response) => {
 
-					this.com_transporte = response.data
+                    this.tipo_ruta = response.data.tipo_ruta
 					
-				})
-                
+                })
+
                 this.axios.post(process.env.VUE_APP_API_URL + '/detalle_reporte.php', item)
                 .then((response) => {
 
                     this.reporte = response.data.reporte
+
                     this.categorias = response.data.categorias
 
                     this.idReporte = response.data.id
@@ -594,6 +615,34 @@
             // eslint-disable-next-line no-unused-vars
             '$route.params.id': function (id) {
                 this.obtener_reportes()
+            },
+            tipo_ruta: function(val){
+                
+                if (val) {
+                    
+                    let data = {
+                        tipo_ruta: val
+                    }
+
+                    // Compañias de transporte
+                    this.axios.post(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', data)
+                    .then((response) => {
+
+                        this.com_transporte = response.data
+                        
+                    })
+                
+                }
+
+                
+            },
+            'reporte.no_placa': function(val){
+                
+                if (val) {
+                    this.reporte.no_placa = val.toUpperCase()
+                }
+                
+
             }
 
         },
