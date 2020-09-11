@@ -55,6 +55,7 @@
                             </b-form-select>
                         </b-form-group>
                     </b-col>
+                    -->
                     <b-col cols="12" sm="12" md="6">
                         <b-form-group label-class="font-weight-bold pt-0" label="Turno">
                             <b-form-select  v-model="usuario.turno" :options="turnos" text-field="nombre" value-field="id" required>
@@ -63,7 +64,7 @@
                                 </template>
                             </b-form-select>
                         </b-form-group>
-                    </b-col> -->
+                    </b-col> 
                     <b-col cols="12" class="mt-4 text-center">
                         <b-button :disabled="isSending" type="submit" variant="success" size="lg">{{ isSending ? 'Registrando..' : 'Registrarse' }} 
                             <font-awesome-icon icon="sign-in-alt" />

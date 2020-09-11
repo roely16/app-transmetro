@@ -109,7 +109,7 @@
                                 </b-col>
                                 <b-col cols="12">
                                     <b-form-group label-class="font-weight-bold pt-0" label="Tipo de Ruta">
-                                        <b-form-select v-model="tipo_ruta" :options="tipos_ruta" text-field="nombre" value-field="id" required>
+                                        <b-form-select disabled v-model="tipo_ruta" :options="tipos_ruta" text-field="nombre" value-field="id" required>
                                             <template v-slot:first>
                                                 <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
                                             </template>
@@ -265,7 +265,7 @@
                         nombre: "Ruta Corta"
                     }
                 ],
-                tipo_ruta: null,
+                tipo_ruta: "L",
                 reporte: {
                     registrado_por: null,
                     no_placa: null,
@@ -327,7 +327,7 @@
                         observaciones: null,
                     }
 
-                    this.tipo_ruta = null
+                    this.tipo_ruta = "L"
                     
                 })
 
@@ -616,26 +616,10 @@
             '$route.params.id': function (id) {
                 this.obtener_reportes()
             },
-            tipo_ruta: function(val){
+            // tipo_ruta: function(val){
                 
-                if (val) {
-                    
-                    let data = {
-                        tipo_ruta: val
-                    }
-
-                    // Compañias de transporte
-                    this.axios.post(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', data)
-                    .then((response) => {
-
-                        this.com_transporte = response.data
-                        
-                    })
                 
-                }
-
-                
-            },
+            // },
             'reporte.no_placa': function(val){
                 
                 if (val) {
@@ -647,6 +631,18 @@
 
         },
         mounted(){
+
+            let data = {
+                tipo_ruta: this.tipo_ruta
+            }
+
+            // Compañias de transporte
+            this.axios.post(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', data)
+            .then((response) => {
+
+                this.com_transporte = response.data
+                
+            })
 
             this.obtener_reportes()
 
