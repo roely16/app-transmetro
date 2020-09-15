@@ -58,7 +58,7 @@
                     -->
                     <b-col cols="12" sm="12" md="6">
                         <b-form-group label-class="font-weight-bold pt-0" label="Turno">
-                            <b-form-select  v-model="usuario.turno" :options="turnos" text-field="nombre" value-field="id" required>
+                            <b-form-select disabled v-model="usuario.turno" :options="turnos" text-field="nombre" value-field="id" required>
                                 <template v-slot:first>
                                     <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
                                 </template>
@@ -93,7 +93,7 @@
                     email: null,
                     etapa: null,
                     rol: null,
-                    turno: null
+                    turno: 1
                 },
                 dependencias: [],
                 etapas: [],

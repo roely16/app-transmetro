@@ -265,7 +265,7 @@
                         nombre: "Ruta Corta"
                     }
                 ],
-                tipo_ruta: "L",
+                tipo_ruta: "C",
                 reporte: {
                     registrado_por: null,
                     no_placa: null,
@@ -327,7 +327,7 @@
                         observaciones: null,
                     }
 
-                    this.tipo_ruta = "L"
+                    this.tipo_ruta = "C"
                     
                 })
 
