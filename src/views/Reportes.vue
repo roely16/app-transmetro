@@ -109,7 +109,7 @@
                                 </b-col>
                                 <b-col cols="12">
                                     <b-form-group label-class="font-weight-bold pt-0" label="Tipo de Ruta">
-                                        <b-form-select disabled v-model="tipo_ruta" :options="tipos_ruta" text-field="nombre" value-field="id" required>
+                                        <b-form-select v-model="tipo_ruta" :options="tipos_ruta" text-field="nombre" value-field="id" required>
                                             <template v-slot:first>
                                                 <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
                                             </template>
@@ -123,7 +123,7 @@
                                                 <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
                                             </template>
                                         </b-form-select> -->
-                                        <v-select :reduce="com => com.id"  v-model="reporte.id_com_transporte" :options="com_transporte" label="nombre"></v-select>
+                                        <v-select :disabled="!tipo_ruta" :reduce="com => com.id"  v-model="reporte.id_com_transporte" :options="com_transporte" label="nombre"></v-select>
                                     </b-form-group>
                                 </b-col>
                                 <b-col cols="12">
@@ -136,7 +136,7 @@
                             <!-- Rol 2 -->
                             <b-row v-if="usuario.id_rol == 2">
                                 <b-col cols="12">
-                                    <b-form-group label-class="font-weight-bold pt-0" label="No. De Grupo">
+                                    <b-form-group label-class="font-weight-bold pt-0" label="Bahía No. ">
                                         <b-form-input v-model="reporte.no_bahia_abordaje" autocomplete="off" required></b-form-input>
                                     </b-form-group>
                                 </b-col>
@@ -149,12 +149,12 @@
                                         <b-form-input v-model="reporte.unidad_transmetro" autocomplete="off" required></b-form-input>
                                     </b-form-group>
                                 </b-col>
-                                <b-col cols="12">
+                                <!-- <b-col cols="12">
                                     <b-form-group label-class="font-weight-bold pt-0" label="Tipo">
                                         <b-form-radio v-model="reporte.tipo_transmetro" name="some-radios" value="E">Ruta Express</b-form-radio>
                                         <b-form-radio v-model="reporte.tipo_transmetro" name="some-radios" value="C">Paradas Continuas</b-form-radio>
                                     </b-form-group>
-                                </b-col>
+                                </b-col> -->
                             </b-row>
                         </b-card>
                     </b-col>
@@ -265,7 +265,7 @@
                         nombre: "Ruta Corta"
                     }
                 ],
-                tipo_ruta: "C",
+                tipo_ruta: null,
                 reporte: {
                     registrado_por: null,
                     no_placa: null,
@@ -327,7 +327,7 @@
                         observaciones: null,
                     }
 
-                    this.tipo_ruta = "C"
+                    this.tipo_ruta = null
                     
                 })
 
@@ -616,10 +616,28 @@
             '$route.params.id': function (id) {
                 this.obtener_reportes()
             },
-            // tipo_ruta: function(val){
+            tipo_ruta: function(val){
+            
+                if (val) {
+                    
+                    let usuario = JSON.parse(localStorage.getItem('usuario-auditoria-transporte'))
+
+                    let data = {
+                        tipo_ruta: this.tipo_ruta,
+                        id_usuario: usuario.id
+                    }
+
+                    // Compañias de transporte
+                    this.axios.post(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', data)
+                    .then((response) => {
+
+                        this.com_transporte = response.data
+                        
+                    })
+
+                }
                 
-                
-            // },
+            },
             'reporte.no_placa': function(val){
                 
                 if (val) {
@@ -631,18 +649,6 @@
 
         },
         mounted(){
-
-            let data = {
-                tipo_ruta: this.tipo_ruta
-            }
-
-            // Compañias de transporte
-            this.axios.post(process.env.VUE_APP_API_URL + '/obtener_com_transporte.php', data)
-            .then((response) => {
-
-                this.com_transporte = response.data
-                
-            })
 
             this.obtener_reportes()
 

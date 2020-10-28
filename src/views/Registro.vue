@@ -37,7 +37,7 @@
                             <b-form-input type="email" v-model="usuario.email" autocomplete="off" required></b-form-input>
                         </b-form-group>
                     </b-col>
-                    <!-- <b-col cols="12" sm="12" md="6">
+                     <b-col cols="12" sm="12" md="6">
                         <b-form-group label-class="font-weight-bold pt-0" label="Etapa">
                             <b-form-select v-model="usuario.etapa" :options="etapas" text-field="nombre" value-field="id" required>
                                 <template v-slot:first>
@@ -46,6 +46,8 @@
                             </b-form-select>
                         </b-form-group>
                     </b-col>
+
+                    
                     <b-col cols="12" sm="12" md="6">
                         <b-form-group label-class="font-weight-bold pt-0" label="Rol">
                             <b-form-select :disabled="roles.length <= 0" v-model="usuario.rol" :options="roles" text-field="nombre" value-field="id" required>
@@ -55,10 +57,20 @@
                             </b-form-select>
                         </b-form-group>
                     </b-col>
-                    -->
+                   
+                    <b-col cols="12" sm="12" md="6">
+                        <b-form-group label-class="font-weight-bold pt-0" label="Punto de Evaluación">
+                            <b-form-select v-model="usuario.id_simulacro" :options="simulacros" text-field="nombre" value-field="id" required>
+                                <template v-slot:first>
+                                    <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
+                                </template>
+                            </b-form-select>
+                        </b-form-group>
+                    </b-col> 
+
                     <b-col cols="12" sm="12" md="6">
                         <b-form-group label-class="font-weight-bold pt-0" label="Turno">
-                            <b-form-select disabled v-model="usuario.turno" :options="turnos" text-field="nombre" value-field="id" required>
+                            <b-form-select :disabled="!usuario.id_simulacro" v-model="usuario.turno" :options="turnos" text-field="nombre" value-field="id" required>
                                 <template v-slot:first>
                                     <b-form-select-option :value="null" disabled>-- Seleccione una opción --</b-form-select-option>
                                 </template>
@@ -93,12 +105,14 @@
                     email: null,
                     etapa: null,
                     rol: null,
-                    turno: 1
+                    turno: null,
+                    id_simulacro: null
                 },
                 dependencias: [],
                 etapas: [],
                 turnos: [],
                 roles: [],
+                simulacros: [],
                 isSending: false
             }
         },
@@ -161,7 +175,8 @@
                 .then((response) => {
 
                     this.etapas = response.data.etapas
-                    this.turnos = response.data.turnos
+                    // this.turnos = response.data.turnos
+                    this.simulacros = response.data.simulacros
                 })
 
             },
@@ -180,6 +195,23 @@
                     this.roles = response.data
 
                 })
+
+            },
+            obtener_turnos(id_simulacro){
+
+                let data = {
+                    id_simulacro: id_simulacro
+                }
+
+                this.axios
+                .post(process.env.VUE_APP_API_URL + '/obtener_turnos.php', data)
+                .then((response) => {
+
+                    console.log(response.data);
+
+                    this.turnos = response.data
+
+                })                
 
             }
         },
@@ -202,6 +234,13 @@
             'usuario.etapa'(val){
 
                 this.obtener_roles(val)
+
+            },
+            'usuario.id_simulacro'(val){
+
+                if (val) {
+                    this.obtener_turnos(val)
+                }
 
             }
 
