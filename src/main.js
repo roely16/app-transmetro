@@ -19,10 +19,10 @@ Vue.use(VueAxios, axios)
 
 // Fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignInAlt, faHome, faSave, faCrosshairs, faUser, faBars, faPlus, faArrowLeft, faSearch, faEye, faEyeSlash, faEdit, faTimesCircle, faFileExcel, faDownload, faSync, faComment } from '@fortawesome/free-solid-svg-icons'
+import { faSignInAlt, faHome, faSave, faCrosshairs, faUser, faBars, faPlus, faArrowLeft, faSearch, faEye, faEyeSlash, faEdit, faTimesCircle, faFileExcel, faDownload, faSync, faComment, faInfoCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faSignInAlt, faHome, faSave, faCrosshairs, faUser, faBars, faPlus, faArrowLeft, faSearch, faEye, faEyeSlash, faEdit, faTimesCircle, faFileExcel, faDownload, faSync, faComment)
+library.add(faSignInAlt, faHome, faSave, faCrosshairs, faUser, faBars, faPlus, faArrowLeft, faSearch, faEye, faEyeSlash, faEdit, faTimesCircle, faFileExcel, faDownload, faSync, faComment, faInfoCircle, faTrash, faSave)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
@@ -31,6 +31,9 @@ import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
 Vue.component('v-select', vSelect)
+
+import HighchartsVue from 'highcharts-vue'
+Vue.use(HighchartsVue)
 
 Vue.config.productionTip = false
 

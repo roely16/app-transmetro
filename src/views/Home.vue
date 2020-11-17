@@ -225,7 +225,7 @@
 
 					if (response.data) {
 						
-						localStorage.removeItem('usuario-monitoreo-fase2')
+						localStorage.removeItem('usuario-auditoria-transporte')
 
 						this.$router.push({ name: 'login' })
 
