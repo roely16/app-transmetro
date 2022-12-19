@@ -1,6 +1,6 @@
 # Aplicación para Auditorias de Transmetro
 
-Aplicación utilizada durante las auditorias del servicio Transmetro, para validar que cumplian con todos los protocolos de higiene requieridos durante la pandemia de COVID-19. 
+Aplicación utilizada durante las auditorias del servicio Transmetro, para validar que cumplian con todos los protocolos de higiene requeridos durante la pandemia de COVID-19. 
 
 ## Project setup
 ```
